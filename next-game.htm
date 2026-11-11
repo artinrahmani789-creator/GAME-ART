@@ -1,1 +1,107 @@
 
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>پادگان مهدی جهان | GAME ART</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#070b13;color:white;
+ font-family:Tahoma,Arial;text-align:center;padding:20px
+}
+h1{color:#71dfff;text-shadow:0 0 15px #168bdb}
+.panel{
+ max-width:500px;margin:18px auto;padding:20px;
+ background:#101c2b;border:1px solid #258acb;
+ border-radius:18px;box-shadow:0 0 18px #123c60
+}
+button{
+ background:#168bdb;color:white;border:0;
+ padding:13px 18px;margin:6px;border-radius:12px;
+ font-size:15px;cursor:pointer
+}
+button:active{transform:scale(.96)}
+.stat{color:#79dfff;font-size:18px}
+.task{padding:12px;background:#172b40;border-radius:12px;margin:10px}
+</style>
+</head>
+<body>
+
+<h1>🏕️ پادگان مهدی جهان</h1>
+<p>بازی اختصاصی GAME ART</p>
+
+<div class="panel">
+ <h2>وضعیت پادگان</h2>
+ <p class="stat">⭐ امتیاز: <span id="score">0</span></p>
+ <p class="stat">🏅 رتبه: <span id="rank">سرباز تازه‌وارد</span></p>
+ <p class="stat">🏕️ سطح پادگان: <span id="level">1</span></p>
+</div>
+
+<div class="panel">
+ <h2>📋 مأموریت‌های امروز</h2>
+ <div class="task">
+  🏃 چالش ورزشی
+  <p>تمرین ورزشی خیالی را کامل کن.</p>
+  <button onclick="mission(20)">انجام مأموریت +۲۰</button>
+ </div>
+ <div class="task">
+  🧩 چالش هوش
+  <p>یک معمای ساده حل کن.</p>
+  <button onclick="mission(15)">انجام مأموریت +۱۵</button>
+ </div>
+ <div class="task">
+  🧹 نظم پادگان
+  <p>محوطه پادگان را مرتب کن.</p>
+  <button onclick="mission(10)">انجام مأموریت +۱۰</button>
+ </div>
+</div>
+
+<div class="panel">
+ <h2>🏗️ ارتقای پادگان</h2>
+ <p>برای ارتقا ۵۰ امتیاز لازم است.</p>
+ <button onclick="upgrade()">ارتقای سطح</button>
+ <p id="message">موفق باشی!</p>
+</div>
+
+<div class="panel">
+ <h2>🏆 جدول افتخارات</h2>
+ <p>با انجام مأموریت‌ها امتیاز جمع کن!</p>
+ <p>هدف: رسیدن به سطح ۱۰</p>
+</div>
+
+<script>
+let score=0,level=1;
+
+function mission(points){
+ score+=points;
+ update();
+ document.getElementById("message").textContent=
+ "آفرین! "+points+" امتیاز گرفتی 🎉";
+}
+
+function upgrade(){
+ if(score>=50){
+  score-=50;
+  level++;
+  document.getElementById("message").textContent=
+  "پادگان ارتقا پیدا کرد! 🏕️";
+  update();
+ }else{
+  document.getElementById("message").textContent=
+  "برای ارتقا به ۵۰ امتیاز نیاز داری!";
+ }
+}
+
+function update(){
+ document.getElementById("score").textContent=score;
+ document.getElementById("level").textContent=level;
+ let ranks=["سرباز تازه‌وارد","سرباز حرفه‌ای","فرمانده گروه","فرمانده ارشد"];
+ document.getElementById("rank").textContent=
+ ranks[Math.min(Math.floor(level/3),3)];
+}
+</script>
+</body>
+  </html>
+  
