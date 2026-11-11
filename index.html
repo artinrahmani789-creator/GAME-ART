@@ -183,3 +183,193 @@ else document.getElementById('botreply').textContent='اسم بازی رو بگ�
 </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ART RACING</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#050b16;color:#e8fbff;font-family:Arial;text-align:center;overflow:hidden}
+h2{margin:10px;color:#67e8f9}
+#game{width:100%;height:65vh;display:block}
+.controls{display:flex;justify-content:center;gap:15px;padding:12px}
+button{background:#071c32;color:#67e8f9;border:2px solid #38bdf8;border-radius:15px;padding:16px 25px;font-size:20px;font-weight:bold;touch-action:none}
+#score{font-size:20px;color:white}
+</style>
+</head>
+<body>
+<h2>🏁 ART RACING</h2>
+<div id="score">امتیاز: 0</div>
+<div id="game"></div>
+<div class="controls">
+<button id="left">⬅️</button>
+<button id="gas">گاز 🚀</button>
+<button id="brake">ترمز</button>
+<button id="right">➡️</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x071426);
+scene.fog=new THREE.Fog(0x071426,25,100);
+
+const camera=new THREE.PerspectiveCamera(65,innerWidth/(innerHeight*.65),.1,150);
+camera.position.set(0,6,11);
+camera.lookAt(0,0,-8);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight*.65);
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+document.getElementById("game").appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xbbeeff,0x26334b,2));
+const light=new THREE.DirectionalLight(0xffffff,2);
+light.position.set(-5,10,5);
+scene.add(light);
+
+function box(w,h,d,color,x,y,z){
+ const m=new THREE.Mesh(
+  new THREE.BoxGeometry(w,h,d),
+  new THREE.MeshStandardMaterial({color,roughness:.55})
+ );
+ m.position.set(x,y,z);
+ scene.add(m);
+ return m;
+}
+
+// Road
+box(12,.15,120,0x242e3b,0,-.15,-40);
+for(let x of [-6,6])box(.15,.2,120,0x38bdf8,x,-.02,-40);
+let lines=[];
+for(let z=10;z>-110;z-=8){
+ lines.push(box(.12,.04,3,0xeafaff,0,.01,z));
+}
+
+// Build a simple 3D Pride 111-style hatchback
+const car=new THREE.Group();
+scene.add(car);
+
+box(1.9,.55,3.5,0x168bdb,0,.7,0).parent.remove;
+const body=new THREE.Mesh(
+ new THREE.BoxGeometry(1.9,.55,3.5),
+ new THREE.MeshStandardMaterial({color:0x168bdb,metalness:.65,roughness:.25})
+);
+body.position.y=.7;car.add(body);
+
+const roof=new THREE.Mesh(
+ new THREE.BoxGeometry(1.55,.75,1.8),
+ new THREE.MeshStandardMaterial({color:0x168bdb,metalness:.5,roughness:.25})
+);
+roof.position.set(0,1.3,-.25);car.add(roof);
+
+const glass=new THREE.MeshStandardMaterial({color:0x142c42,metalness:.4,roughness:.15});
+const frontGlass=new THREE.Mesh(new THREE.BoxGeometry(1.4,.55,.08),glass);
+frontGlass.position.set(0,1.35, .68);
+frontGlass.rotation.x=-.3;car.add(frontGlass);
+
+const backGlass=frontGlass.clone();
+backGlass.position.z=-1.15;backGlass.rotation.x=.3;car.add(backGlass);
+
+for(let x of [-.98,.98]){
+ for(let z of [-1.1,1.1]){
+  const wheel=new THREE.Mesh(
+   new THREE.CylinderGeometry(.38,.38,.22,20),
+   new THREE.MeshStandardMaterial({color:0x101318})
+  );
+  wheel.rotation.z=Math.PI/2;
+  wheel.position.set(x,.4,z);
+  car.add(wheel);
+ }
+}
+for(let x of [-.65,.65]){
+ const lamp=box(.35,.18,.08,0xe9fbff,x,.75,1.77);
+ car.add(lamp);
+}
+car.position.set(0,0,4);
+
+let obstacles=[];
+function makeObstacle(){
+ const o=new THREE.Group();
+ const base=new THREE.Mesh(
+  new THREE.BoxGeometry(1.5,1.2,1.2),
+  new THREE.MeshStandardMaterial({color:0xff6b35})
+ );
+ base.position.y=.6;o.add(base);
+ o.position.set([-3,0,3][Math.floor(Math.random()*3)],0,-75);
+ scene.add(o);obstacles.push(o);
+}
+let score=0,speed=.35,steer=0,gas=false,brake=false,over=false;
+
+function hold(id,fn){
+ const el=document.getElementById(id);
+ el.addEventListener("pointerdown",e=>{e.preventDefault();fn(true)});
+ el.addEventListener("pointerup",()=>fn(false));
+ el.addEventListener("pointerleave",()=>fn(false));
+ el.addEventListener("pointercancel",()=>fn(false));
+}
+hold("left",v=>steer=v?-1:0);
+hold("right",v=>steer=v?1:0);
+hold("gas",v=>gas=v);
+hold("brake",v=>brake=v);
+
+window.addEventListener("keydown",e=>{
+ if(e.key==="ArrowLeft"||e.key==="a")steer=-1;
+ if(e.key==="ArrowRight"||e.key==="d")steer=1;
+ if(e.key==="ArrowUp")gas=true;
+ if(e.key==="ArrowDown")brake=true;
+});
+window.addEventListener("keyup",e=>{
+ if(["ArrowLeft","ArrowRight","a","d"].includes(e.key))steer=0;
+ if(e.key==="ArrowUp")gas=false;
+ if(e.key==="ArrowDown")brake=false;
+});
+
+function reset(){
+ obstacles.forEach(o=>scene.remove(o));
+ obstacles=[];
+ score=0;speed=.35;over=false;
+ car.position.x=0;
+ document.getElementById("score").textContent="امتیاز: 0";
+}
+function animate(){
+ requestAnimationFrame(animate);
+ if(!over){
+  speed=brake?.12:gas?.75:.35;
+  car.position.x+=steer*.12;
+  car.position.x=Math.max(-4,Math.min(4,car.position.x));
+  lines.forEach(l=>{
+   l.position.z+=speed*1.8;
+   if(l.position.z>12)l.position.z=-110;
+  });
+  if(Math.random()<.018)makeObstacle();
+  obstacles.forEach(o=>{
+   o.position.z+=speed*1.8;
+   if(Math.abs(o.position.x-car.position.x)<1.5 &&
+      Math.abs(o.position.z-car.position.z)<2){
+    over=true;
+    alert("تصادف کردی! امتیاز: "+score);
+    reset();
+   }
+   if(o.position.z>12){
+    scene.remove(o);
+    obstacles=obstacles.filter(a=>a!==o);
+    score+=10;
+    document.getElementById("score").textContent="امتیاز: "+score;
+   }
+  });
+ }
+ renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener("resize",()=>{
+ camera.aspect=innerWidth/(innerHeight*.65);
+ camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight*.65);
+});
+</script>
+</body>
+</html>
