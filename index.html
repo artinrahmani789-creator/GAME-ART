@@ -9,32 +9,176 @@ body{background:#10152b;color:white;text-align:center;font-family:tahoma;padding
 h1{color:#00e5ff}
 button{padding:18px 35px;border:0;border-radius:15px;font-size:20px}
 #game{background:#273454;padding:45px 10px;border-radius:20px;margin-top:25px}
+</
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GAME ART</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#070d18;color:#eaf8ff;font-family:tahoma}
+header{padding:24px 15px;text-align:center;background:#0c192b;border-bottom:2px solid #28caff}
+h1{color:#65dcff;font-size:36px;margin:5px}
+header p{color:#a6dff5}
+main{max-width:950px;margin:auto;padding:18px}
+h2{color:#72ddff}
+.games{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.card{background:#11243a;border:1px solid #20506d;border-radius:17px;padding:18px;text-align:center}
+.card .emoji{font-size:42px}
+button{background:#087eae;color:white;border:0;border-radius:12px;padding:12px 18px;font-size:16px;cursor:pointer;margin:5px}
+button:hover{background:#14b9ed;color:#06101b}
+#screen{display:none;background:#10243a;border:1px solid #36caff;border-radius:18px;padding:18px;margin-top:20px;text-align:center}
+#screen button{min-width:75px}
+#result{font-size:20px;color:#83e5ff;min-height:30px}
+#playarea{min-height:160px;padding:15px}
+.robot{background:#10283e;padding:18px;border-radius:16px;margin-top:20px}
+.robot b{color:#70dfff}
+input{background:#071321;color:white;border:1px solid #38caff;border-radius:10px;padding:12px;width:65%}
+#arena{height:250px;background:#071321;border-radius:15px;position:relative;overflow:hidden;margin:10px}
+#player{position:absolute;bottom:12px;left:48%;font-size:35px}
+#target{position:absolute;font-size:30px;cursor:pointer}
+@media(min-width:650px){.games{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
-<h1>🎮 GAME ART 🎮</h1>
-<p>بازی سرعت واکنش</p>
-<div id="game">
-<h2 id="msg">برای شروع بزن!</h2>
-<button onclick="start()">شروع بازی</button>
+<header>
+<h1>❄️ GAME ART ❄️</h1>
+<p>دنیای بازی‌های هیجان‌انگیز</p>
+</header>
+<main>
+<h2>🎮 منوی بازی‌ها</h2>
+<div class="games">
+<div class="card"><div class="emoji">💎</div><h3>شکار الماس</h3><button onclick="openGame('diamond')">بازی کن</button></div>
+<div class="card"><div class="emoji">🏎️</div><h3>ماشین‌سواری</h3><button onclick="openGame('car')">بازی کن</button></div>
+<div class="card"><div class="emoji">🚀</div><h3>جنگ فضایی</h3><button onclick="openGame('space')">بازی کن</button></div>
+<div class="card"><div class="emoji">✊</div><h3>سنگ‌کاغذقیچی</h3><button onclick="openGame('rps')">بازی کن</button></div>
+<div class="card"><div class="emoji">⚽</div><h3>پنالتی فوتبال</h3><button onclick="openGame('football')">بازی کن</button></div>
+<div class="card"><div class="emoji">🟢</div><h3>سرعت واکنش</h3><button onclick="openGame('reaction')">بازی کن</button></div>
+<div class="card"><div class="emoji">🔒</div><h3>بازی جدید</h3><p>به‌زودی...</p></div>
 </div>
+
+<section id="screen">
+<h2 id="gameTitle">بازی</h2>
+<div id="playarea"></div>
+<div id="result"></div>
+<button onclick="home()">🏠 برگشت به منو</button>
+</section>
+
+<div class="robot">
+<h2>🤖 ART BOT</h2>
+<p>سلام! من ربات GAME ART هستم. می‌تونم بازی‌های سایت رو باز کنم.</p>
+<input id="command" placeholder="مثلاً فوتبال">
+<button onclick="bot()">ارسال</button>
+<p id="botreply">منتظر دستورت هستم!</p>
+</div>
+</main>
 <script>
-let timer;
-function start(){
-let m=document.getElementById('msg');
-m.textContent='صبر کن تا سبز بشه...';
-let b=document.querySelector('button');
-b.disabled=true;
-timer=setTimeout(()=>{
-document.getElementById('game').style.background='green';
-m.textContent='حالا کلیک کن!';
-b.disabled=false;
+const screen=document.getElementById('screen');
+const area=document.getElementById('playarea');
+const result=document.getElementById('result');
+const title=document.getElementById('gameTitle');
+let timer=null,score=0,carPos=48,carInterval=null;
+
+function home(){
+clearTimeout(timer);clearInterval(carInterval);
+screen.style.display='none';
+document.querySelector('.games').style.display='grid';
+}
+function openGame(name){
+home();
+document.querySelector('.games').style.display='none';
+screen.style.display='block';
+result.textContent='';
+if(name==='diamond') diamond();
+if(name==='rps') rps();
+if(name==='football') football();
+if(name==='reaction') reaction();
+if(name==='car') car();
+if(name==='space') space();
+}
+function setup(t){title.textContent=t;area.innerHTML='';result.textContent='';}
+function diamond(){
+setup('💎 شکار الماس');
+score=0;
+area.innerHTML='<p>الماس‌ها را جمع کن!</p><div id="arena"><button id="target" onclick="collect()">💎</button></div><p>امتیاز: <b id="points">0</b></p><button onclick="diamond()">شروع دوباره</button>';
+moveDiamond();
+}
+function moveDiamond(){
+let t=document.getElementById('target'),a=document.getElementById('arena');
+if(!t||!a)return;
+t.style.left=Math.random()*85+'%';
+t.style.top=Math.random()*75+'%';
+}
+function collect(){
+score++;
+document.getElementById('points').textContent=score;
+moveDiamond();
+}
+function rps(){
+setup('✊ سنگ کاغذ قیچی');
+area.innerHTML='<p>یکی را انتخاب کن:</p><button onclick="playRps(0)">✊ سنگ</button><button onclick="playRps(1)">📄 کاغذ</button><button onclick="playRps(2)">✂️ قیچی</button>';
+}
+function playRps(n){
+let c=Math.floor(Math.random()*3),names=['سنگ','کاغذ','قیچی'];
+result.textContent='تو: '+names[n]+' | من: '+names[c]+' — '+(n===c?'مساوی!':(n-c+3)%3===1?'تو بردی! 🎉':'من بردم! 😁');
+}
+function football(){
+setup('⚽ پنالتی فوتبال');
+area.innerHTML='<p>جهت شوت را انتخاب کن!</p><button onclick="kick(0)">⬅️ چپ</button><button onclick="kick(1)">⬆️ وسط</button><button onclick="kick(2)">➡️ راست</button><div style="font-size:65px">🥅</div>';
+}
+function kick(n){
+let g=Math.floor(Math.random()*3);
+result.textContent=n===g?'دروازه‌بان گرفت! 🧤':'گلللل! ⚽🎉';
+}
+function reaction(){
+setup('🟢 سرعت واکنش');
+area.innerHTML='<button id="react" onclick="reactClick()" style="height:110px;width:85%;background:#34506b">برای شروع بزن</button>';
+let b=document.getElementById('react'),ready=false,start=0;
 b.onclick=()=>{
-m.textContent='آفرین! واکنشت عالی بود 🎉';
-b.textContent='دوباره بازی کن';
-b.onclick=()=>location.reload();
+if(!ready){
+b.disabled=true;b.textContent='صبر کن...';b.style.background='#34506b';
+timer=setTimeout(()=>{ready=true;start=Date.now();b.disabled=false;b.textContent='حالا بزن!';b.style.background='#00a84f'},1500+Math.random()*2500);
+}else{
+result.textContent='زمان واکنش تو: '+(Date.now()-start)+' میلی‌ثانیه! 🎉';
+b.disabled=true;
+}
 };
-},2000+Math.random()*3000);
+}
+function reactClick(){}
+function car(){
+setup('🏎️ ماشین‌سواری');
+area.innerHTML='<p>با دکمه‌ها از موانع دوری کن!</p><div id="arena"><div id="player">🏎️</div><div id="target">🚧</div></div><button onclick="moveCar(-8)">⬅️ چپ</button><button onclick="moveCar(8)">راست ➡️</button><p>هر حرکت، ماشین را جابه‌جا می‌کند.</p>';
+carPos=48;
+moveObstacle();
+}
+function moveCar(d){
+carPos=Math.max(2,Math.min(88,carPos+d));
+let p=document.getElementById('player');
+if(p)p.style.left=carPos+'%';
+}
+function moveObstacle(){
+let t=document.getElementById('target');
+if(t){t.style.left=Math.random()*85+'%';t.style.top=Math.random()*70+'%';}
+}
+function space(){
+setup('🚀 جنگ فضایی');
+area.innerHTML='<p>روی دشمن‌ها بزن تا امتیاز بگیری!</p><div id="arena"><button id="target" onclick="shoot()">👾</button></div><p>امتیاز: <b id="points">0</b></p>';
+moveDiamond();
+}
+function shoot(){
+score++;
+let p=document.getElementById('points');
+if(p)p.textContent=score;
+moveDiamond();
+}
+function bot(){
+let c=document.getElementById('command').value.toLowerCase();
+let map={'الماس':'diamond','ماینکرافت':'diamond','ماشین':'car','فضایی':'space','جنگ':'space','سنگ':'rps','فوتبال':'football','پنالتی':'football','واکنش':'reaction','سرعت':'reaction'};
+let found=Object.keys(map).find(k=>c.includes(k));
+if(found){document.getElementById('botreply').textContent='دارم بازی رو باز می‌کنم! 🤖';openGame(map[found]);}
+else document.getElementById('botreply').textContent='اسم بازی رو بگو: ماشین، فوتبال، فضایی، الماس، سنگ یا واکنش.';
 }
 </script>
 </body>
