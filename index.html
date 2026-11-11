@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GAME ART</title>
+<style>
+body{background:#10152b;color:white;text-align:center;font-family:tahoma;padding:20px}
+h1{color:#00e5ff}
+button{padding:18px 35px;border:0;border-radius:15px;font-size:20px}
+#game{background:#273454;padding:45px 10px;border-radius:20px;margin-top:25px}
+</style>
+</head>
+<body>
+<h1>🎮 GAME ART 🎮</h1>
+<p>بازی سرعت واکنش</p>
+<div id="game">
+<h2 id="msg">برای شروع بزن!</h2>
+<button onclick="start()">شروع بازی</button>
+</div>
+<script>
+let timer;
+function start(){
+let m=document.getElementById('msg');
+m.textContent='صبر کن تا سبز بشه...';
+let b=document.querySelector('button');
+b.disabled=true;
+timer=setTimeout(()=>{
+document.getElementById('game').style.background='green';
+m.textContent='حالا کلیک کن!';
+b.disabled=false;
+b.onclick=()=>{
+m.textContent='آفرین! واکنشت عالی بود 🎉';
+b.textContent='دوباره بازی کن';
+b.onclick=()=>location.reload();
+};
+},2000+Math.random()*3000);
+}
+</script>
+</body>
+</html>
