@@ -256,3 +256,29 @@ function startRace(){
 </body>
   </html>
   
+
+<script>
+(function () {
+  const now = new Date();
+  const start = new Date(2026, 10, 22, 0, 0, 0);
+
+  if (now >= start) {
+    const menu = document.querySelector("main") || document.body;
+
+    if (!document.getElementById("next-game-link")) {
+      const game = document.createElement("a");
+      game.id = "next-game-link";
+      game.href = "next-game.html";
+      game.textContent = "🎮 بازی جدید: پادگان مهدی جهان";
+      game.style.cssText =
+        "display:block;margin:20px auto;padding:18px;" +
+        "max-width:400px;background:#168bdb;color:white;" +
+        "border-radius:15px;text-align:center;" +
+        "font-family:Tahoma;text-decoration:none;";
+      menu.appendChild(game);
+    }
+  }
+})();
+</script>
+</body>
+</html>
