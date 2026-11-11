@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ART BOT | GAME ART</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#061323;color:white;
+ font-family:Tahoma,Arial,sans-serif;
+ min-height:100vh;padding:20px;
+}
+.container{max-width:700px;margin:auto}
+header{
+ text-align:center;padding:25px;
+ background:linear-gradient(135deg,#102e49,#087cae);
+ border:1px solid #48d9ff;border-radius:22px;
+}
+.robot{font-size:75px;filter:drop-shadow(0 0 15px #43dfff)}
+h1{color:#8ceaff}
+.panel{
+ margin-top:18px;padding:20px;
+ background:#0d2035;border:1px solid #23658b;
+ border-radius:18px;
+}
+button{
+ border:0;border-radius:12px;padding:12px;
+ background:#12aee8;color:#001827;
+ font-weight:bold;cursor:pointer;margin:4px;
+}
+button:hover{background:#85eaff}
+input{
+ width:100%;padding:14px;border-radius:12px;
+ border:1px solid #42cfff;background:#07182a;
+ color:white;font-size:16px;
+}
+#messages{
+ height:250px;overflow:auto;
+ background:#061323;border-radius:12px;
+ padding:12px;margin-bottom:12px;
+}
+.msg{padding:10px;margin:8px 0;border-radius:10px;
+ background:#123a56}
+.user{background:#075b83}
+.games{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.game{background:#102c43;padding:15px;border-radius:12px}
+small{color:#8ceaff}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+ <div class="robot">🤖</div>
+ <h1>ART BOT</h1>
+ <p>مدیر هوشمند GAME ART</p>
+ <small>ICE BLUE EDITION ❄️</small>
+</header>
+
+<section class="panel">
+<h2>💬 گفت‌وگو با ART BOT</h2>
+<div id="messages">
+ <div class="msg">سلام! من ART BOT هستم.
+چه کمکی از دستم برمیاد؟ 🤖</div>
+</div>
+<input id="question" placeholder="پیامت رو بنویس...">
+<button onclick="send()">ارسال پیام</button>
+</section>
+
+<section class="panel">
+<h2>🎮 معرفی بازی‌ها</h2>
+<div class="games" id="games">
+ <div class="game">🏎️<br>ART RACING<br><small>بازی ماشین‌سواری</small></div>
+ <div class="game">⚽<br>فوتبال<br><small>بازی ورزشی</small></div>
+ <div class="game">🐍<br>مار<br><small>بازی کلاسیک</small></div>
+ <div class="game">🧱<br>بلوک‌ها<br><small>بازی سرگرمی</small></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>⭐ بازی جدید ماه</h2>
+<p>به‌زودی بازی جدید در GAME ART منتشر می‌شود!</p>
+</section>
+
+<section class="panel">
+<h2>🛠️ ابزارهای مدیر</h2>
+<button onclick="alert('گزارش آماده بررسی است!')">گزارش خرابی بازی</button>
+<button onclick="alert('فهرست بازی‌ها نمایش داده شد!')">بررسی بازی‌ها</button>
+</section>
+</div>
+
+<script>
+function send(){
+ const input=document.getElementById('question');
+ const box=document.getElementById('messages');
+ const q=input.value.trim();
+ if(!q)return;
+ box.innerHTML+='<div class="msg user">شما: '+escapeHTML(q)+'</div>';
+ let answer='می‌تونی اسم بازی مورد علاقه‌ات رو بهم بگی تا راهنمایی‌ات کنم! 🎮';
+ if(q.includes('سلام'))answer='سلام! به GAME ART خوش اومدی! 💙';
+ else if(q.includes('بازی'))answer='بازی‌های ماشین، فوتبال و سرگرمی رو ببین! 🎮';
+ else if(q.includes('خراب'))answer='اسم بازی خراب رو برای مدیر سایت گزارش کن.';
+ else if(q.includes('سازنده'))answer='من ART BOT هستم؛ دستیار GAME ART!';
+ box.innerHTML+='<div class="msg">🤖 ART BOT: '+answer+'</div>';
+ box.scrollTop=box.scrollHeight;
+ input.value='';
+}
+function escapeHTML(s){
+ return s.replace(/[&<>"']/g,c=>({
+ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[c]));
+}
+</script>
+</body>
+</html>
