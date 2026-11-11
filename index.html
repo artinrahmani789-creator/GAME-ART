@@ -7,78 +7,252 @@
 <title>GAME ART</title>
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;background:#050b16;color:white;
-  font-family:Tahoma,Arial,sans-serif;
-}
-header{
-  padding:24px 15px;text-align:center;
-  background:linear-gradient(135deg,#07182c,#063b63);
-  border-bottom:2px solid #38bdf8;
-}
-h1{color:#8be5ff;margin:0;font-size:35px}
-header p{color:#b8eaff}
-main{max-width:900px;margin:auto;padding:18px}
-.bot{
-  display:flex;align-items:center;gap:15px;
-  padding:18px;margin:15px 0;
-  border:2px solid #38bdf8;border-radius:20px;
-  background:linear-gradient(120deg,#102d48,#07182c);
-  color:white;text-decoration:none;
-  box-shadow:0 0 18px #38bdf844;
-}
-.robot{font-size:55px}
-.bot strong{color:#8be5ff;font-size:23px}
-.bot small{display:block;color:#c9eaff;margin-top:8px}
+body{margin:0;background:#050b16;color:white;font-family:Tahoma}
+header{text-align:center;padding:22px;background:linear-gradient(135deg,#07182c,#063b63);border-bottom:2px solid #38bdf8}
+h1{color:#8be5ff;margin:0;font-size:34px}
+main{max-width:850px;margin:auto;padding:16px}
+.bot,.game,.panel{background:#10243b;border:1px solid #38bdf8;border-radius:17px;padding:17px;margin:12px 0}
+.bot{display:flex;align-items:center;gap:15px;text-decoration:none;color:white}
+.robot{font-size:45px}
+.bot strong{font-size:22px;color:#8be5ff}
+.bot small{display:block;margin-top:7px;color:#c9eaff}
 h2{color:#8be5ff}
-.games{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-  gap:13px;
-}
-.game{
-  padding:22px 10px;text-align:center;
-  background:#10243b;border:1px solid #2776a5;
-  border-radius:16px;color:white;
-}
-.game a{color:#8be5ff;text-decoration:none}
-.soon{opacity:.7}
-footer{text-align:center;color:#8caec6;padding:25px}
+.games{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+button{background:#0878b5;color:white;border:0;border-radius:12px;padding:13px;font-size:16px;cursor:pointer;margin:4px}
+button:active{transform:scale(.96)}
+.game{margin:0;text-align:center}
+.game button{width:100%}
+.panel{display:none;text-align:center}
+.panel.active{display:block}
+#arena{background:#061526;border:2px solid #38bdf8;border-radius:12px;position:relative;overflow:hidden;margin:12px auto;touch-action:manipulation}
+#snakeBoard{width:300px;height:300px;max-width:100%;background:#071525}
+#targetBoard{height:300px;max-width:100%;background:#071525;position:relative}
+#target{position:absolute;font-size:35px;cursor:pointer}
+#road{height:330px;width:230px;max-width:100%;background:repeating-linear-gradient(0deg,#333 0 35px,#444 35px 70px);position:relative}
+.car{position:absolute;font-size:35px}
+.food{font-size:42px}
+footer{text-align:center;padding:25px;color:#8caec6}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🎮 GAME ART</h1>
-  <p>دنیای بازی‌های آرتین</p>
+<h1>🎮 GAME ART</h1>
+<p>دنیای بازی‌های آرتین</p>
 </header>
 
 <main>
 
 <a class="bot" href="artbot.html">
-  <span class="robot">🤖</span>
-  <span>
-    <strong>ART BOT</strong>
-    <small>برای ورود به چت‌بات کلیک کن</small>
-  </span>
-  <span>➜</span>
+<span class="robot">🤖</span>
+<span><strong>ART BOT</strong><small>ورود به چت‌بات</small></span>
+<span>➜</span>
 </a>
 
-<h2>🔥 بازی‌های برتر</h2>
-<section class="games">
-  <div class="game">✊<br>سنگ کاغذ قیچی<br><a href="#rps">بازی</a></div>
-  <div class="game">⚽<br>فوتبال<br><a href="#football">بازی</a></div>
-  <div class="game">🐍<br>مار<br><a href="#snake">بازی</a></div>
-  <div class="game">🎯<br>هدف‌گیری<br><a href="#target">بازی</a></div>
-  <div class="game soon">🚗<br>ART RACING<br>به‌زودی</div>
-  <div class="game soon">🍔<br>بازی غذاها<br>به‌زودی</div>
+<h2>🔥 بازی‌های GAME ART</h2>
+<div class="games">
+<div class="game">✊<h3>سنگ کاغذ قیچی</h3><button onclick="openGame('rps')">شروع بازی</button></div>
+<div class="game">⚽<h3>پنالتی فوتبال</h3><button onclick="openGame('football')">شروع بازی</button></div>
+<div class="game">🐍<h3>بازی مار</h3><button onclick="openGame('snake')">شروع بازی</button></div>
+<div class="game">🎯<h3>هدف‌گیری</h3><button onclick="openGame('targetGame')">شروع بازی</button></div>
+<div class="game">🍔<h3>جمع‌آوری غذا</h3><button onclick="openGame('food')">شروع بازی</button></div>
+<div class="game">🚗<h3>ART RACING</h3><button onclick="openGame('racing')">شروع بازی</button></div>
+</div>
+
+<section id="rps" class="panel">
+<h2>✊ سنگ کاغذ قیچی</h2>
+<p id="rpsResult">یک گزینه انتخاب کن!</p>
+<button onclick="playRPS('سنگ')">✊ سنگ</button>
+<button onclick="playRPS('کاغذ')">✋ کاغذ</button>
+<button onclick="playRPS('قیچی')">✌️ قیچی</button>
 </section>
 
-<h2>🕹️ بخش بازی‌ها</h2>
-<p>بازی‌های جدید GAME ART به‌مرور به این صفحه اضافه می‌شوند.</p>
+<section id="football" class="panel">
+<h2>⚽ پنالتی فوتبال</h2>
+<p>جهت شوت را انتخاب کن!</p>
+<p id="footballResult">آماده‌ای؟</p>
+<button onclick="kick('چپ')">⬅️ چپ</button>
+<button onclick="kick('وسط')">⬆️ وسط</button>
+<button onclick="kick('راست')">➡️ راست</button>
+</section>
+
+<section id="snake" class="panel">
+<h2>🐍 بازی مار</h2>
+<p>با دکمه‌ها حرکت کن و غذا بخور.</p>
+<canvas id="snakeBoard" width="300" height="300"></canvas>
+<p id="snakeScore">امتیاز: 0</p>
+<div>
+<button onclick="direction(0,-1)">⬆️</button><br>
+<button onclick="direction(-1,0)">⬅️</button>
+<button onclick="direction(1,0)">➡️</button><br>
+<button onclick="direction(0,1)">⬇️</button>
+</div>
+<button onclick="startSnake()">شروع دوباره</button>
+</section>
+
+<section id="targetGame" class="panel">
+<h2>🎯 هدف‌گیری</h2>
+<p>هدف را بزن و امتیاز بگیر!</p>
+<p id="targetScore">امتیاز: 0</p>
+<div id="targetBoard">
+<span id="target" onclick="hitTarget()">🎯</span>
+</div>
+<button onclick="startTarget()">شروع دوباره</button>
+</section>
+
+<section id="food" class="panel">
+<h2>🍔 جمع‌آوری غذا</h2>
+<p>غذاها را انتخاب کن و امتیاز بگیر!</p>
+<p id="foodScore">امتیاز: 0</p>
+<div id="foodBoard" style="font-size:45px;min-height:100px"></div>
+<button onclick="newFood()">غذای جدید</button>
+</section>
+
+<section id="racing" class="panel">
+<h2>🚗 ART RACING</h2>
+<p>ماشین را از موانع دور کن!</p>
+<p id="raceScore">امتیاز: 0</p>
+<div id="road">
+<div id="playerCar" class="car" style="bottom:10px;left:95px">🚗</div>
+<div id="obstacle" class="car" style="top:0;left:40px">🚙</div>
+</div>
+<button onclick="moveCar(-1)">⬅️ چپ</button>
+<button onclick="moveCar(1)">راست ➡️</button>
+<button onclick="startRace()">شروع دوباره</button>
+</section>
+
+<button onclick="closeGames()">🏠 برگشت به منو</button>
 
 </main>
+<footer>GAME ART © 2026 🎮</footer>
 
-<footer>GAME ART © 2026 | ساخته شده با عشق به بازی 🎮</footer>
+<script>
+function openGame(id){
+ closeGames();
+ document.getElementById(id).classList.add('active');
+ if(id==='snake')startSnake();
+ if(id==='targetGame')startTarget();
+ if(id==='food')newFood();
+ if(id==='racing')startRace();
+}
+function closeGames(){
+ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+ stopSnake();clearInterval(raceTimer);
+}
+function playRPS(user){
+ let choices=['سنگ','کاغذ','قیچی'];
+ let bot=choices[Math.floor(Math.random()*3)];
+ let result=user===bot?'مساوی شد!':(
+ (user==='سنگ'&&bot==='قیچی')||
+ (user==='کاغذ'&&bot==='سنگ')||
+ (user==='قیچی'&&bot==='کاغذ')?'تو بردی! 🎉':'ربات برد!');
+ document.getElementById('rpsResult').textContent='تو: '+user+' | ربات: '+bot+' | '+result;
+}
+function kick(side){
+ let goal=['چپ','وسط','راست'][Math.floor(Math.random()*3)];
+ document.getElementById('footballResult').textContent=
+ side===goal?'⚽ گل زدی! 🎉':'دروازه‌بان توپ را گرفت!';
+}
 
+// بازی مار
+const canvas=document.getElementById('snakeBoard');
+const ctx=canvas.getContext('2d');
+let snake,foodPos,dir,score,snakeTimer;
+function startSnake(){
+ stopSnake();snake=[{x:7,y:7},{x:6,y:7},{x:5,y:7}];
+ dir={x:1,y:0};score=0;placeFood();drawSnake();
+ snakeTimer=setInterval(tickSnake,150);
+}
+function stopSnake(){clearInterval(snakeTimer)}
+function placeFood(){
+ foodPos={x:Math.floor(Math.random()*15),y:Math.floor(Math.random()*15)};
+}
+function direction(x,y){
+ if(x!==-dir.x||y!==-dir.y)dir={x,y};
+}
+function tickSnake(){
+ let head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+ if(head.x<0||head.y<0||head.x>=15||head.y>=15||
+ snake.some(s=>s.x===head.x&&s.y===head.y)){
+ stopSnake();alert('بازی تمام شد! امتیاز: '+score);return;
+ }
+ snake.unshift(head);
+ if(head.x===foodPos.x&&head.y===foodPos.y){score+=10;placeFood()}
+ else snake.pop();
+ document.getElementById('snakeScore').textContent='امتیاز: '+score;
+ drawSnake();
+}
+function drawSnake(){
+ ctx.fillStyle='#071525';ctx.fillRect(0,0,300,300);
+ ctx.fillStyle='#38bdf8';
+ snake.forEach(s=>ctx.fillRect(s.x*20+1,s.y*20+1,18,18));
+ ctx.fillStyle='#ffb84d';ctx.fillRect(foodPos.x*20+2,foodPos.y*20+2,16,16);
+}
+document.addEventListener('keydown',e=>{
+ if(e.key==='ArrowUp')direction(0,-1);
+ if(e.key==='ArrowDown')direction(0,1);
+ if(e.key==='ArrowLeft')direction(-1,0);
+ if(e.key==='ArrowRight')direction(1,0);
+});
+
+// هدف‌گیری
+let targetPoints=0;
+function startTarget(){
+ targetPoints=0;moveTarget();
+ document.getElementById('targetScore').textContent='امتیاز: 0';
+}
+function moveTarget(){
+ let t=document.getElementById('target');
+ t.style.left=Math.random()*75+'%';
+ t.style.top=Math.random()*75+'%';
+}
+function hitTarget(){
+ targetPoints++;
+ document.getElementById('targetScore').textContent='امتیاز: '+targetPoints;
+ moveTarget();
+}
+
+// غذا
+let foods=['🍔','🍕','🍟','🍎','🍩','🍉','🌮','🍰'];
+let foodPoints=0;
+function newFood(){
+ let b=document.getElementById('foodBoard');
+ b.innerHTML='';
+ let chosen=foods[Math.floor(Math.random()*foods.length)];
+ let item=document.createElement('button');
+ item.className='food';item.textContent=chosen;
+ item.onclick=()=>{foodPoints+=10;
+ document.getElementById('foodScore').textContent='امتیاز: '+foodPoints;
+ newFood()};
+ b.appendChild(item);
+}
+
+// ماشین‌سواری ساده
+let carLane=1,raceTimer,racePoints=0,obstacleLane=0,obstacleY=0;
+function moveCar(n){
+ carLane=Math.max(0,Math.min(2,carLane+n));
+ document.getElementById('playerCar').style.left=(20+carLane*75)+'px';
+}
+function startRace(){
+ clearInterval(raceTimer);
+ carLane=1;racePoints=0;obstacleLane=Math.floor(Math.random()*3);obstacleY=0;
+ moveCar(0);
+ raceTimer=setInterval(()=>{
+ obstacleY+=8;
+ let ob=document.getElementById('obstacle');
+ ob.style.top=obstacleY+'px';
+ ob.style.left=(20+obstacleLane*75)+'px';
+ if(obstacleY>270){
+  obstacleY=0;obstacleLane=Math.floor(Math.random()*3);
+  racePoints++;
+  document.getElementById('raceScore').textContent='امتیاز: '+racePoints;
+ }
+ if(obstacleY>245&&obstacleY<295&&carLane===obstacleLane){
+  clearInterval(raceTimer);alert('تصادف شد! امتیاز: '+racePoints);
+ }
+ },100);
+}
+</script>
 </body>
-</html>
+  </html>
+  
