@@ -1,21 +1,84 @@
-<a href="artbot.html" class="artbot-link">
-  🤖
-  <span>ورود به چت ART BOT</span>
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GAME ART</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#050b16;color:white;
+  font-family:Tahoma,Arial,sans-serif;
+}
+header{
+  padding:24px 15px;text-align:center;
+  background:linear-gradient(135deg,#07182c,#063b63);
+  border-bottom:2px solid #38bdf8;
+}
+h1{color:#8be5ff;margin:0;font-size:35px}
+header p{color:#b8eaff}
+main{max-width:900px;margin:auto;padding:18px}
+.bot{
+  display:flex;align-items:center;gap:15px;
+  padding:18px;margin:15px 0;
+  border:2px solid #38bdf8;border-radius:20px;
+  background:linear-gradient(120deg,#102d48,#07182c);
+  color:white;text-decoration:none;
+  box-shadow:0 0 18px #38bdf844;
+}
+.robot{font-size:55px}
+.bot strong{color:#8be5ff;font-size:23px}
+.bot small{display:block;color:#c9eaff;margin-top:8px}
+h2{color:#8be5ff}
+.games{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:13px;
+}
+.game{
+  padding:22px 10px;text-align:center;
+  background:#10243b;border:1px solid #2776a5;
+  border-radius:16px;color:white;
+}
+.game a{color:#8be5ff;text-decoration:none}
+.soon{opacity:.7}
+footer{text-align:center;color:#8caec6;padding:25px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 GAME ART</h1>
+  <p>دنیای بازی‌های آرتین</p>
+</header>
+
+<main>
+
+<a class="bot" href="artbot.html">
+  <span class="robot">🤖</span>
+  <span>
+    <strong>ART BOT</strong>
+    <small>برای ورود به چت‌بات کلیک کن</small>
+  </span>
+  <span>➜</span>
 </a>
 
-<style>
-.artbot-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: fit-content;
-  padding: 15px 22px;
-  background: #071c35;
-  color: #75d9ff;
-  border: 2px solid #38bdf8;
-  border-radius: 18px;
-  text-decoration: none;
-  font-size: 20px;
-  box-shadow: 0 0 18px #38bdf855;
-}
-</style>
+<h2>🔥 بازی‌های برتر</h2>
+<section class="games">
+  <div class="game">✊<br>سنگ کاغذ قیچی<br><a href="#rps">بازی</a></div>
+  <div class="game">⚽<br>فوتبال<br><a href="#football">بازی</a></div>
+  <div class="game">🐍<br>مار<br><a href="#snake">بازی</a></div>
+  <div class="game">🎯<br>هدف‌گیری<br><a href="#target">بازی</a></div>
+  <div class="game soon">🚗<br>ART RACING<br>به‌زودی</div>
+  <div class="game soon">🍔<br>بازی غذاها<br>به‌زودی</div>
+</section>
+
+<h2>🕹️ بخش بازی‌ها</h2>
+<p>بازی‌های جدید GAME ART به‌مرور به این صفحه اضافه می‌شوند.</p>
+
+</main>
+
+<footer>GAME ART © 2026 | ساخته شده با عشق به بازی 🎮</footer>
+
+</body>
+</html>
